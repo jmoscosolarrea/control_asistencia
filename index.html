@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ControlMax - Sistema de Control de Asistencia</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body class="bg-gray-100 font-sans antialiased" x-data="app()" x-init="inicializar()">
+
+    <div class="min-h-screen flex flex-col">
+        <!-- Barra Superior -->
+        <header class="bg-slate-900 text-white shadow-md">
+            <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
+                <div class="flex items-center space-x-3">
+                    <span class="bg-indigo-600 text-xs font-bold px-2.5 py-1 rounded uppercase tracking-wider">Demo Comercial</span>
+                    <h1 class="text-xl font-bold">ControlMax - Seguridad Física</h1>
+                </div>
+                <div class="text-sm text-slate-400">
+                    Base de Datos: <span class="text-green-400 font-semibold">PostgreSQL (Cloud)</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Contenido Principal -->
+        <main class="max-w-7xl mx-auto px-4 py-8 flex-grow w-full">
+            
+            <!-- Indicador de carga -->
+            <div x-show="!cargado" class="text-center py-20">
+                <p class="text-gray-500 text-lg animate-pulse">Consultando base de datos relacional...</p>
+            </div>
+
+            <!-- Contenido cuando ya cargó -->
+            <div x-show="cargado" style="display: none;" class="space-y-8">
+                
+                <!-- Tarjetas de Resumen Dinámicas -->
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+                        <p class="text-sm font-medium text-gray-500">Clientes Activos</p>
+                        <p class="text-3xl font-bold text-gray-900 mt-2" x-text="resumen.totalClientes"></p>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+                        <p class="text-sm font-medium text-gray-500">Puestos Monitoreados</p>
+                        <p class="text-3xl font-bold text-indigo-600 mt-2" x-text="resumen.totalPuestos"></p>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+                        <p class="text-sm font-medium text-gray-500">Cobertura Activa</p>
+                        <p class="text-3xl font-bold text-green-600 mt-2" x-text="resumen.coberturaActiva"></p>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200 bg-red-50 border-red-200">
+                        <p class="text-sm font-medium text-red-600">⚠️ Puestos Fantasmas</p>
+                        <p class="text-3xl font-bold text-red-700 mt-2" x-text="resumen.puestosFantasma"></p>
+                    </div>
+                </div>
+
+                <!-- Contenedor Agrupado por Clientes -->
+                <template x-for="cliente in clientes" :key="cliente.id">
+                    <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+                        
+                        <!-- Cabecera del Cliente -->
+                        <div class="bg-slate-800 text-white px-6 py-4 flex justify-between items-center">
+                            <h2 class="text-lg font-bold flex items-center space-x-2">
+                                <span>🏢</span>
+                                <span x-text="cliente.nombre_cliente"></span>
+                            </h2>
+                            <span class="text-xs bg-slate-700 text-slate-300 px-3 py-1 rounded-full font-medium" x-text="cliente.puestos.length + ' Puestos Asignados'"></span>
+                        </div>
+                        
+                        <!-- Tabla de Puestos del Cliente -->
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left border-collapse">
+                                <thead>
+                                    <tr class="bg-gray-50 text-gray-600 text-xs uppercase tracking-wider border-b border-gray-200">
+                                        <th class="py-3 px-6">Puesto / Garita / Ubicación</th>
+                                        <th class="py-3 px-6">Guardia Asignado</th>
+                                        <th class="py-3 px-6">Cédula</th>
+                                        <th class="py-3 px-6">Turno</th>
+                                        <th class="py-3 px-6">Estado de Cobertura</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-gray-200 text-sm">
+                                    <template x-for="puesto in cliente.puestos" :key="puesto.id">
+                                        <tr :class="puesto.tipo_estado === 'danger' ? 'bg-red-50/60' : 'hover:bg-gray-50/50'">
+                                            <td class="py-4 px-6 font-medium text-gray-900" x-text="puesto.nombre_puesto"></td>
+                                            <td class="py-4 px-6" :class="puesto.tipo_estado === 'danger' ? 'text-red-600 font-bold' : 'text-gray-700'" x-text="puesto.guardia_asignado"></td>
+                                            <td class="py-4 px-6 text-gray-500 font-mono text-xs" x-text="puesto.cedula"></td>
+                                            <td class="py-4 px-6 text-gray-600" x-text="puesto.turno"></td>
+                                            <td class="py-4 px-6">
+                                                <span :class="puesto.tipo_estado === 'danger' ? 'bg-red-100 text-red-800 animate-pulse' : 'bg-green-100 text-green-800'" class="text-xs font-semibold px-2.5 py-1 rounded" x-text="puesto.estado"></span>
+                                            </td>
+                                        </tr>
+                                    </template>
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+                </template>
+
+            </div>
+
+        </main>
+        
+        <footer class="bg-white border-t border-gray-200 py-4 text-center text-xs text-gray-500 mt-12">
+            ControlMax Security Systems &bull; Base de Datos Relacional en la Nube
+        </footer>
+    </div>
+
+    <script>
+        // Reemplaza con tus credenciales reales de Supabase
+        const SUPABASE_URL = 'https://nppdowtddmpuujtwjaur.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5wcGRvd3RkZG1wdXVqdHdqYXVyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODU4NzQ3NjAsImV4cCI6MjEwMTQ1MDc2MH0.uNABtlyEjNpSmKBMEuzcxr7TPfsUl5yY-Jty2qYuRdo';
+        
+        const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        function app() {
+            return {
+                cargado: false,
+                resumen: { totalClientes: 0, totalPuestos: 0, coberturaActiva: 0, puestosFantasma: 0 },
+                clientes: [],
+
+                async inicializar() {
+                    try {
+                        // Consultar clientes y hacer un join lógico con puestos
+                        let { data: clientesData, error: errCli } = await supabaseClient.from('clientes').select('*');
+                        let { data: puestosData, error: errPue } = await supabaseClient.from('puestos').select('*');
+
+                        if (errCli || errPue) throw (errCli || errPue);
+
+                        // Mapear estructurando los puestos dentro de sus respectivos clientes
+                        this.clientes = clientesData.map(cli => {
+                            return {
+                                ...cli,
+                                puestos: puestosData.filter(p => p.cliente_id === cli.id)
+                            };
+                        });
+
+                        // Calcular métricas
+                        this.resumen.totalClientes = clientesData.length;
+                        this.resumen.totalPuestos = puestosData.length;
+                        this.resumen.puestosFantasma = puestosData.filter(p => p.tipo_estado === 'danger').length;
+                        this.resumen.coberturaActiva = this.resumen.totalPuestos - this.resumen.puestosFantasma;
+
+                        this.cargado = true;
+                    } catch (error) {
+                        console.error("Error al conectar con la base de datos relacional:", error);
+                        alert("Hubo un error cargando los datos. Revisa la consola.");
+                    }
+                }
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,232 @@
+{
+  "resumen": {
+    "totalClientes": 4,
+    "totalPuestos": 28,
+    "coberturaActiva": 25,
+    "puestosFantasma": 3
+  },
+  "clientes": [
+    {
+      "clienteId": "cli-01",
+      "nombreCliente": "Urbanización Los Lagos",
+      "puestos": [
+        {
+          "id": "p-101",
+          "nombrePuesto": "Garita Principal (Norte)",
+          "guardiaAsignado": "Carlos Mendoza",
+          "cedula": "0928374651",
+          "turno": "06:00 - 18:00",
+          "estado": "Cubierto",
+          "tipoEstado": "success"
+        },
+        {
+          "id": "p-102",
+          "nombrePuesto": "Garita Secundaria (Sur)",
+          "guardiaAsignado": "Marco Véliz",
+          "cedula": "0912345678",
+          "turno": "06:00 - 18:00",
+          "estado": "Cubierto",
+          "tipoEstado": "success"
+        },
+        {
+          "id": "p-103",
+          "nombrePuesto": "Puesto Club House / Lago",
+          "guardiaAsignado": "SIN ASIGNAR (Ausente)",
+          "cedula": "---",
+          "turno": "08:00 - 16:00",
+          "estado": "⚠️ Puesto Fantasma",
+          "tipoEstado": "danger"
+        },
+        {
+          "id": "p-104",
+          "nombrePuesto": "Ronda Perimetral Muelle",
+          "guardiaAsignado": "Jorge Alarcón",
+          "cedula": "0987654321",
+          "turno": "18:00 - 06:00",
+          "estado": "Cubierto",
+          "tipoEstado": "success"
+        }
+      ]
+    },
+    {
+      "clienteId": "cli-02",
+      "nombreCliente": "Edificio Financial Center",
+      "puestos": [
+        {
+          "id": "p-201",
+          "nombrePuesto": "Lobby Principal - Torre A",
+          "guardiaAsignado": "Luis Andrade",
+          "cedula": "0934567890",
+          "turno": "06:00 - 14:00",
+          "estado": "Cubierto",
+          "tipoEstado": "success"
+        },
+        {
+          "id": "p-202",
+          "nombrePuesto": "Sótano 2 - Control Vehicular",
+          "guardiaAsignado": "MARCACIÓN RECHAZADA (Fuera de Rango)",
+          "cedula": "0945678901",
+          "turno": "06:00 - 18:00",
+          "estado": "⚠️ Sin Cobertura",
+          "tipoEstado": "danger"
+        },
+        {
+          "id": "p-203",
+          "nombrePuesto": "Torre B - Recepción Ejecutiva",
+          "guardiaAsignado": "Pedro Suárez",
+          "cedula": "0956789012",
+          "turno": "14:00 - 22:00",
+          "estado": "Cubierto",
+          "tipoEstado": "success"
+        },
+        {
+          "id": "p-204",
+          "nombrePuesto": "Salida de Emergencia Posterior",
+          "guardiaAsignado": "Esteban Quito",
+          "cedula": "0967890123",
+          "turno": "06:00 - 18:00",
+          "estado": "Cubierto",
+          "tipoEstado": "success"
+        },
+        {
+          "id": "p-205",
+          "nombrePuesto": "Terraza / Cuarto de Máquinas",
+          "guardiaAsignado": "Alex Cedeño",
+          "cedula": "0978901234",
+          "turno": "08:00 - 17:00",
+          "estado": "Cubierto",
+          "tipoEstado": "success"
+        }
+      ]
+    },
+    {
+      "clienteId": "cli-03",
+      "nombreCliente": "Plaza Comercial Norte",
+      "puestos": [
+        {
+          "id": "p-301",
+          "nombrePuesto": "Acceso Principal Peatonal",
+          "guardiaAsignado": "Roberto Gómez",
+          "cedula": "0989012345",
+          "turno": "08:00 - 16:00",
+          "estado": "Cubierto",
+          "tipoEstado": "success"
+        },
+        {
+          "id": "p-302",
+          "nombrePuesto": "Bahía de Carga y Descarga",
+          "guardiaAsignado": "SIN ASIGNAR (Relevo no presentado)",
+          "cedula": "---",
+          "turno": "06:00 - 14:00",
+          "estado": "⚠️ Puesto Fantasma",
+          "tipoEstado": "danger"
+        },
+        {
+          "id": "p-303",
+          "nombrePuesto": "Puerta Patio de Comidas",
+          "guardiaAsignado": "Manuel Pineda",
+          "cedula": "0990123456",
+          "turno": "12:00 - 20:00",
+          "estado": "Cubierto",
+          "tipoEstado": "success"
+        },
+        {
+          "id": "p-304",
+          "nombrePuesto": "Parqueadero Subterráneo Sector A",
+          "guardiaAsignado": "Darwin Zambrano",
+          "cedula": "0901234567",
+          "turno": "08:00 - 16:00",
+          "estado": "Cubierto",
+          "tipoEstado": "success"
+        },
+        {
+          "id": "p-305",
+          "nombrePuesto": "Parqueadero Subterráneo Sector B",
+          "guardiaAsignado": "Julio Jaramillo",
+          "cedula": "0912398765",
+          "turno": "08:00 - 16:00",
+          "estado": "Cubierto",
+          "tipoEstado": "success"
+        },
+        {
+          "id": "p-306",
+          "nombrePuesto": "Monitoreo de Cámaras / CCT",
+          "guardiaAsignado": "Vicente Fernández",
+          "cedula": "0923487654",
+          "turno": "06:00 - 18:00",
+          "estado": "Cubierto",
+          "tipoEstado": "success"
+        }
+      ]
+    },
+    {
+      "clienteId": "cli-04",
+      "nombreCliente": "Bodegas Industriales Sur",
+      "puestos": [
+        {
+          "id": "p-401",
+          "nombrePuesto": "Garita Camiones (Báscula)",
+          "guardiaAsignado": "Walter Mercado",
+          "cedula": "0934576543",
+          "turno": "06:00 - 18:00",
+          "estado": "Cubierto",
+          "tipoEstado": "success"
+        },
+        {
+          "id": "p-402",
+          "nombrePuesto": "Bodega 01 - Productos Químicos",
+          "guardiaAsignado": "Fausto Vera",
+          "cedula": "0945687654",
+          "turno": "06:00 - 18:00",
+          "estado": "Cubierto",
+          "tipoEstado": "success"
+        },
+        {
+          "id": "p-403",
+          "nombrePuesto": "Bodega 02 - Zona de Carga Fría",
+          "guardiaAsignado": "Ángel Loor",
+          "cedula": "0956798765",
+          "turno": "06:00 - 18:00",
+          "estado": "Cubierto",
+          "tipoEstado": "success"
+        },
+        {
+          "id": "p-404",
+          "nombrePuesto": "Patio de Maniobras Posterior",
+          "guardiaAsignado": "Santiago Benítez",
+          "cedula": "0967809876",
+          "turno": "18:00 - 06:00",
+          "estado": "Cubierto",
+          "tipoEstado": "success"
+        },
+        {
+          "id": "p-405",
+          "nombrePuesto": "Garita Perimetral Este (Río)",
+          "guardiaAsignado": "Héctor Lavoe",
+          "cedula": "0978910987",
+          "turno": "06:00 - 18:00",
+          "estado": "Cubierto",
+          "tipoEstado": "success"
+        },
+        {
+          "id": "p-406",
+          "nombrePuesto": "Área de Transformadores Eléctricos",
+          "guardiaAsignado": "Franklin Ruiz",
+          "cedula": "0989021098",
+          "turno": "08:00 - 17:00",
+          "estado": "Cubierto",
+          "tipoEstado": "success"
+        },
+        {
+          "id": "p-407",
+          "nombrePuesto": "Puerta Administrativa Oficinas",
+          "guardiaAsignado": "Ximena Torres",
+          "cedula": "0990132109",
+          "turno": "08:00 - 16:00",
+          "estado": "Cubierto",
+          "tipoEstado": "success"
+        }
+      ]
+    }
+  ]
+}
