@@ -101,8 +101,133 @@
 
             </div>
 
+            <!-- Sección de Gestión de Guardias (Añadir debajo de tu dashboard actual) -->
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-10" x-data="guardiasApp()">
+                <div class="bg-white shadow rounded-lg p-6">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="text-xl font-bold text-gray-800">📋 Administración de Guardias</h3>
+                        <button @click="abrirModal()" class="bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700 transition">
+                            + Nuevo Guardia
+                        </button>
+                    </div>
+
+                    <!-- Tabla de Guardias -->
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Nombres</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Cédula</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Teléfono</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Estado</th>
+                                    <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-white divide-y divide-gray-200">
+                                <template x-for="guardia in guardias" :key="guardia.id">
+                                    <tr>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900" x-text="guardia.nombres"></td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500" x-text="guardia.cedula"></td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500" x-text="guardia.telefono"></td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800" x-text="guardia.estado"></span>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                            <button @click="eliminarGuardia(guardia.id)" class="text-red-600 hover:text-red-900">Eliminar</button>
+                                        </td>
+                                    </tr>
+                                </template>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Modal para Nuevo Guardia -->
+                <div x-show="modalAbierto" class="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center" style="display: none;">
+                    <div class="bg-white rounded-lg p-6 w-full max-w-md shadow-xl">
+                        <h3 class="text-lg font-bold mb-4">Registrar Nuevo Guardia</h3>
+                        <form @submit.prevent="guardarGuardia">
+                            <div class="mb-4">
+                                <label class="block text-sm font-medium text-gray-700">Nombres y Apellidos</label>
+                                <input type="text" x-model="form.nombres" required class="mt-1 block w-full border border-gray-300 rounded-md p-2">
+                            </div>
+                            <div class="mb-4">
+                                <label class="block text-sm font-medium text-gray-700">Cédula</label>
+                                <input type="text" x-model="form.cedula" required class="mt-1 block w-full border border-gray-300 rounded-md p-2">
+                            </div>
+                            <div class="mb-4">
+                                <label class="block text-sm font-medium text-gray-700">Teléfono</label>
+                                <input type="text" x-model="form.telefono" class="mt-1 block w-full border border-gray-300 rounded-md p-2">
+                            </div>
+                            <div class="flex justify-end space-x-2">
+                                <button type="button" @click="modalAbierto = false" class="bg-gray-300 px-4 py-2 rounded">Cancelar</button>
+                                <button type="submit" class="bg-indigo-600 text-white px-4 py-2 rounded">Guardar</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Gestión de Clientes -->
+            <div x-data="clientesApp()" class="bg-white shadow rounded-lg p-6 mt-10">
+                <h3 class="text-xl font-bold mb-4">🏢 Administración de Clientes</h3>
+                <form @submit.prevent="guardarCliente" class="flex gap-2 mb-6">
+                    <input type="text" x-model="nuevoCliente" placeholder="Nombre del nuevo cliente" class="border p-2 rounded flex-grow">
+                    <button type="submit" class="bg-slate-800 text-white px-4 py-2 rounded">Crear Cliente</button>
+                </form>
+                <div class="flex flex-wrap gap-2">
+                    <template x-for="cli in clientesLista" :key="cli.id">
+                        <span class="bg-slate-100 px-3 py-1 rounded text-sm border" x-text="cli.nombre_cliente"></span>
+                    </template>
+                </div>
+            </div>
+
+            <!-- Gestión de Puestos -->
+            <div x-data="puestosApp()" class="bg-white shadow rounded-lg p-6 mt-10">
+                <h3 class="text-xl font-bold mb-4">📍 Gestión de Puestos</h3>
+                <form @submit.prevent="guardarPuesto" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <!-- Selector dinámico de Cliente -->
+                    <select x-model="formPuesto.cliente_id" class="border p-2 rounded w-full" required>
+                        <option value="">Seleccione un Cliente...</option>
+                        <template x-for="cli in clientes" :key="cli.id">
+                            <option :value="cli.id" x-text="cli.nombre_cliente"></option>
+                        </template>
+                    </select>
+                    
+                    <input type="text" x-model="formPuesto.nombre_puesto" placeholder="Nombre Puesto (Ej: Garita Norte)" class="border p-2 rounded" required>
+                    <input type="text" x-model="formPuesto.turno" placeholder="Turno (Ej: 06:00 - 18:00)" class="border p-2 rounded" required>
+                    
+                    <button type="submit" class="md:col-span-2 bg-indigo-600 text-white py-2 rounded hover:bg-indigo-700">Guardar Puesto</button>
+                </form>
+            </div>
+
+            <!-- Módulo de Asignación -->
+            <div x-data="asignacionApp()" class="bg-white shadow rounded-lg p-6 mt-10 border-l-4 border-indigo-600">
+                <h3 class="text-xl font-bold mb-4">🔄 Asignar Guardia a Puesto</h3>
+                <form @submit.prevent="realizarAsignacion" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    
+                    <!-- Seleccionar Puesto -->
+                    <select x-model="form.puesto_id" class="border p-2 rounded" required>
+                        <option value="">Seleccione Puesto...</option>
+                        <template x-for="p in puestos" :key="p.id">
+                            <option :value="p.id" x-text="p.nombre_puesto"></option>
+                        </template>
+                    </select>
+
+                    <!-- Seleccionar Guardia -->
+                    <select x-model="form.guardia_id" class="border p-2 rounded" required>
+                        <option value="">Seleccione Guardia...</option>
+                        <template x-for="g in guardias" :key="g.id">
+                            <option :value="g.id" x-text="g.nombres"></option>
+                        </template>
+                    </select>
+
+                    <button type="submit" class="bg-green-600 text-white py-2 rounded hover:bg-green-700 font-bold">Asignar</button>
+                </form>
+            </div>
+
         </main>
-        
+
         <footer class="bg-white border-t border-gray-200 py-4 text-center text-xs text-gray-500 mt-12">
             ControlMax Security Systems &bull; Base de Datos Relacional en la Nube
         </footer>
@@ -148,6 +273,142 @@
                         console.error("Error al conectar con la base de datos relacional:", error);
                         alert("Hubo un error cargando los datos. Revisa la consola.");
                     }
+                }
+            }
+        }
+
+        function guardiasApp() {
+            return {
+                guardias: [],
+                modalAbierto: false,
+                form: { nombres: '', cedula: '', telefono: '', estado: 'Disponible' },
+                
+                async init() {
+                    await this.cargarGuardias();
+                },
+
+                async cargarGuardias() {
+                    const { data, error } = await supabaseClient.from('guardias').select('*');
+                    if (error) {
+                        console.error('Error al cargar guardias:', error);
+                    } else {
+                        this.guardias = data;
+                    }
+                },
+
+                abrirModal() {
+                    this.form = { nombres: '', cedula: '', telefono: '', estado: 'Disponible' };
+                    this.modalAbierto = true;
+                },
+
+                async guardarGuardia() {
+                    // Generar un ID único simple basado en timestamp
+                    const nuevoId = 'g-' + Date.now().toString().slice(-4);
+                    const datosAInsertar = { id: nuevoId, ...this.form };
+
+                    const { error } = await supabaseClient.from('guardias').insert([datosAInsertar]);
+                    if (error) {
+                        alert('Error al guardar: ' + error.message);
+                    } else {
+                        this.modalAbierto = false;
+                        await this.cargarGuardias();
+                    }
+                },
+
+                async eliminarGuardia(id) {
+                    if (confirm('¿Estás seguro de eliminar este guardia?')) {
+                        const { error } = await supabaseClient.from('guardias').delete().eq('id', id);
+                        if (error) {
+                            alert('Error al eliminar: ' + error.message);
+                        } else {
+                            await this.cargarGuardias();
+                        }
+                    }
+                }
+            }
+        }
+
+        function clientesApp() {
+            return {
+                clientesLista: [],
+                nuevoCliente: '',
+                async init() {
+                    let { data } = await supabaseClient.from('clientes').select('*');
+                    this.clientesLista = data;
+                },
+                async guardarCliente() {
+                    const id = 'cli-' + Date.now().toString().slice(-4);
+                    await supabaseClient.from('clientes').insert([{ id, nombre_cliente: this.nuevoCliente }]);
+                    location.reload(); // Recargamos para refrescar la lista
+                }
+            }
+        }
+
+        function puestosApp() {
+            return {
+                clientes: [],
+                formPuesto: { nombre_puesto: '', turno: '', cliente_id: '', guardia_asignado: 'SIN ASIGNAR', cedula: '---', estado: 'Libre', tipo_estado: 'success' },
+                
+                async init() {
+                    // Cargamos clientes para el desplegable
+                    let { data } = await supabaseClient.from('clientes').select('id, nombre_cliente');
+                    this.clientes = data || [];
+                },
+                
+                async guardarPuesto() {
+                    if (!this.formPuesto.cliente_id) return alert('Por favor seleccione un cliente');
+                    
+                    const id = 'p-' + Date.now().toString().slice(-4);
+                    const { error } = await supabaseClient.from('puestos').insert([{ id, ...this.formPuesto }]);
+                    
+                    if (error) {
+                        alert('Error al guardar: ' + error.message);
+                    } else {
+                        alert('Puesto creado correctamente');
+                        location.reload();
+                    }
+                }
+            }
+        }
+
+        function asignacionApp() {
+            return {
+                puestos: [],
+                guardias: [],
+                form: { puesto_id: '', guardia_id: '' },
+
+                async init() {
+                    // Cargar datos para los selectores
+                    let { data: p } = await supabaseClient.from('puestos').select('id, nombre_puesto');
+                    let { data: g } = await supabaseClient.from('guardias').select('id, nombres');
+                    this.puestos = p || [];
+                    this.guardias = g || [];
+                },
+
+                async realizarAsignacion() {
+                    // 1. Obtener nombre del guardia para actualizar el puesto
+                    const guardiaSeleccionado = this.guardias.find(g => g.id === this.form.guardia_id);
+                    
+                    // 2. Registrar en la tabla asignaciones
+                    const idAsig = 'asig-' + Date.now().toString().slice(-4);
+                    await supabaseClient.from('asignaciones').insert([{ 
+                        id: idAsig, 
+                        puesto_id: this.form.puesto_id, 
+                        guardia_id: this.form.guardia_id, 
+                        estado_cobertura: 'Cubierto' 
+                    }]);
+
+                    // 3. Actualizar la tabla puestos para que el dashboard muestre al guardia
+                    await supabaseClient.from('puestos')
+                        .update({ 
+                            guardia_asignado: guardiaSeleccionado.nombres, 
+                            estado: 'Cubierto', 
+                            tipo_estado: 'success' 
+                        })
+                        .eq('id', this.form.puesto_id);
+
+                    alert('¡Guardia asignado correctamente!');
+                    location.reload();
                 }
             }
         }
